@@ -20,33 +20,80 @@ Ook is er een database server nodig, waarop je een database aanmaakt genaamd: 'b
 Is dit gelukt, voer het volgende command uit om de database te vullen met data:
 - `php database/seeder.php`
 
-+------------------------+       +------------------------+       +------------------------+
-|          User          |       |          Post          |       |          Like          |
-+------------------------+       +------------------------+       +------------------------+
-| PK: UserID             |       | PK: PostID             |       | PK: LikeID             |
-| Username               |-------| FK: UserID             |-------| FK: UserID             |
-| Password               |       | Caption                |       | FK: PostID             |
-| Email                  |       | ImageURL               |       +------------------------+
-| Bio                    |       | CreationDate           |
-| ProfilePicture         |       +------------------------+
-+------------------------+
+# User Table
 
-+------------------------+       +------------------------+       +------------------------+
-|        Comment         |       |      CodeSnippet       |       |         Fork           |
-+------------------------+       +------------------------+       +------------------------+
-| PK: CommentID          |       | PK: SnippetID          |       | PK: ForkID             |
-| FK: UserID             |-------| FK: UserID             |-------| FK: OriginalSnippetID  |
-| FK: PostID             |       | Text                   |       | FK: ForkedSnippetID    |
-| Text                   |       | Language               |       +------------------------+
-| CommentDate            |       | SyntaxHighlighting     |
-+------------------------+       +------------------------+
+| Field           | Type     | Constraint | 
+| --------------- | -------- | ---------- |
+| PK: UserID      |          |            |
+| Username        |          |            |
+| Password        |          |            |
+| Email           |          |            |
+| Bio             |          |            |
+| ProfilePicture  |          |            |
 
-+------------------------+       +------------------------+       +------------------------+
-|          Feed          |       |     ColorScheme        |       |         Feed           |
-+------------------------+       +------------------------+       +------------------------+
-| PK: FeedID             |       | PK: SchemeID           |       | PK: FeedID             |
-| FK: UserID             |-------| Name                   |-------| FK: UserID             |
-| FK: PostID             |       | BackgroundColor        |       | FK: PostID             |
-| Timestamp              |       | ForegroundColor        |       +------------------------+
-+------------------------+       | AccentColor            |
-                                 +------------------------+
+# Post Table
+
+| Field           | Type     | Constraint | 
+| --------------- | -------- | ---------- |
+| PK: PostID      |          |            |
+| FK: UserID      |          |            |
+| Caption         |          |            |
+| ImageURL        |          |            |
+| CreationDate    |          |            |
+
+# Like Table
+
+| Field           | Type     | Constraint | 
+| --------------- | -------- | ---------- |
+| PK: LikeID      |          |            |
+| FK: UserID      |          |            |
+| FK: PostID      |          |            |
+
+# Comment Table
+
+| Field           | Type     | Constraint | 
+| --------------- | -------- | ---------- |
+| PK: CommentID   |          |            |
+| FK: UserID      |          |            |
+| FK: PostID      |          |            |
+| Text            |          |            |
+| CommentDate     |          |            |
+
+# CodeSnippet Table
+
+| Field           | Type     | Constraint | 
+| --------------- | -------- | ---------- |
+| PK: SnippetID   |          |            |
+| FK: UserID      |          |            |
+| Text            |          |            |
+| Language        |          |            |
+| SyntaxHighlighting |      |            |
+
+# Fork Table
+
+| Field           | Type     | Constraint | 
+| --------------- | -------- | ---------- |
+| PK: ForkID      |          |            |
+| FK: UserID      |          |            |
+| FK: OriginalSnippetID |    |            |
+| FK: ForkedSnippetID   |    |            |
+
+# Feed Table
+
+| Field           | Type     | Constraint | 
+| --------------- | -------- | ---------- |
+| PK: FeedID      |          |            |
+| FK: UserID      |          |            |
+| FK: PostID      |          |            |
+| Timestamp       |          |            |
+
+# ColorScheme Table
+
+| Field           | Type     | Constraint | 
+| --------------- | -------- | ---------- |
+| PK: SchemeID    |          |            |
+| Name            |          |            |
+| BackgroundColor |          |            |
+| ForegroundColor |          |            |
+| AccentColor     |          |            |
+
