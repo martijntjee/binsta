@@ -1,0 +1,22 @@
+{% extends 'layouts/app.twig' %}
+
+{% block title %}Kitchens{% endblock %}
+
+{% block content %}
+    <div class="text-center p-4">
+        <h1 class="text-4xl font-bold mb-4">Explore Our Kitchens</h1>
+        <p class="text-lg">Discover a variety of kitchens with unique offerings.</p>
+        <a href="/kitchen/create" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded inline-block mt-4">Create New Kitchen</a>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {% for kitchen in kitchens %}
+            <div class="bg-white rounded-md p-4 shadow-md">
+                <h2 class="text-xl font-bold mb-2 text-center">
+                    <a href="/kitchen/show?id={{ kitchen.id }}" class="mt-2 inline-block">{{ kitchen.name }}</a>
+                </h2>
+                <a href="/kitchen/edit?id={{ kitchen.id }}" class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded mt-2 inline-block">Edit Kitchen</a>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

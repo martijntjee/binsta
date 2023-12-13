@@ -1,0 +1,11 @@
+{% extends 'layouts/app.twig' %}
+
+{% block title %}Error{% endblock %}
+
+{% block content %}
+    <div class="text-center">
+        <h1 class="text-4xl font-bold mb-4">Oops! Something went wrong!</h1>
+        <p class="text-lg">{{ errorMessage }}</p>
+        <p class="text-lg">Please try again later or contact support.</p>
+    </div>
+{% endblock %}

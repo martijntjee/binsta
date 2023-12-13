@@ -1,0 +1,22 @@
+{% extends 'layouts/app.twig' %}
+
+{% block title %}Recipes{% endblock %}
+
+{% block content %}
+    <div class="text-center">
+        <h1 class="text-4xl font-bold mb-4">Explore Our Recipes</h1>
+        <p class="text-lg">Discover a variety of delicious recipes created just for you.</p>
+        <a href="/recipe/create" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded inline-block mt-4">Create New Recipe</a>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {% for recipe in recipes %}
+            <div class="bg-white rounded-md p-4 shadow-md">
+                <h2 class="text-xl font-bold mb-2">{{ recipe.name }}</h2>
+                <p class="text-gray-700">{{ recipe.type }}</p>
+                <a href="/recipe/show?id={{ recipe.id }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4 inline-block">View Details</a>
+                <a href="/recipe/edit?id={{ recipe.id }}" class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded mt-2 inline-block">Edit Recipe</a>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

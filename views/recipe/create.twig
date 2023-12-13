@@ -1,0 +1,47 @@
+{% extends 'layouts/app.twig' %}
+
+{% block title %}New Recipe{% endblock %}
+
+{% block content %}
+    <div class="text-center p-4">
+        <h1 class="text-4xl font-bold mb-4">New Recipe</h1>
+    </div>
+
+    <form method="post" class="max-w-md mx-auto p-4 bg-white shadow-md rounded-md">
+        <div class="mb-4">
+            <label for="name" class="block text-gray-700 font-bold mb-2">Recipe Name</label>
+            <input type="text" id="name" name="name" class="w-full px-3 py-2 border rounded-md">
+        </div>
+
+        <div class="mb-4">
+            <label for="type" class="block text-gray-700 font-bold mb-2">Recipe Type</label>
+            <select id="type" name="type" class="w-full px-3 py-2 border rounded-md">
+                {% for type in recipe_types %}
+                    <option value="{{ type }}">{{ type|capitalize }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="mb-4">
+            <label for="level" class="block text-gray-700 font-bold mb-2">Recipe Level</label>
+            <select id="level" name="level" class="w-full px-3 py-2 border rounded-md">
+                {% for level in recipe_levels %}
+                    <option value="{{ level }}">{{ level|capitalize }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="mb-4">
+            <label for="kitchen" class="block text-gray-700 font-bold mb-2">Kitchen</label>
+            <select id="kitchen" name="kitchen" class="w-full px-3 py-2 border rounded-md">
+                {% for kitchen in kitchens %}
+                    <option value="{{ kitchen.id }}">{{ kitchen.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="text-center">
+            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-md">Create Recipe</button>
+        </div>
+    </form>
+{% endblock %}

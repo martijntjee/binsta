@@ -1,0 +1,28 @@
+{% extends 'layouts/app.twig' %}
+
+{% block title %}{{ recipe.name }} - Recipes{% endblock %}
+
+{% block content %}
+    <div class="text-center">
+        <h1 class="text-4xl font-bold mb-4">{{ recipe.name }}</h1>
+    </div>
+
+    <div class="bg-white rounded-md p-4 shadow-md">
+        <h2 class="text-xl font-bold mb-2"><a href="/kitchen/show?id={{ recipe.__get('kitchen').id }}">
+            {{ recipe.__get('kitchen').name }}
+            <a/></h2>
+    </div>
+
+    <div class="mt-8 pb-4">
+        <div class="bg-white rounded-md p-4 shadow-md">
+            <h2 class="text-xl font-bold mb-2">Difficulty</h2>
+            <p>{{ recipe.level }}</p>
+        </div>
+        <br>
+        <div class="bg-white rounded-md p-4 shadow-md">
+            <h2 class="text-xl font-bold mb-2">Kind of Recipe</h2>
+            <p>{{ recipe.type }}</p>
+        </div>
+    </div>
+    <a href="/recipe" class="mt-8 inline-block bg-gray-200 rounded-md px-4 py-2 shadow-md hover:bg-gray-300">Back</a>
+{% endblock %}

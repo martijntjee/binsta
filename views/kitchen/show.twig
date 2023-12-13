@@ -1,0 +1,24 @@
+{% extends 'layouts/app.twig' %}
+
+{% block title %}{{ kitchen.name }} - Kitchens{% endblock %}
+
+{% block content %}
+    <div class="text-center p-4">
+        <h1 class="text-4xl font-bold mb-4">{{ kitchen.name }}</h1>
+        <p class="text-lg">{{ kitchen.description }}</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {% for recipe in kitchen.__get('ownRecipeList') %}
+            <div class="bg-white rounded-md p-4 shadow-md">
+                <h2 class="text-xl font-bold mb-2">{{ recipe.name }}</h2>
+                <p class="text-gray-700">{{ recipe.type }}</p>
+                <p class="text-gray-700">{{ recipe.level }}</p>
+                <a href="/recipe/show?id={{ recipe.id }}" 
+                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4 inline-block">View</a>
+            </div>
+        {% endfor %}
+    </div>
+
+    <a href="/kitchen" class="mt-8 inline-block bg-gray-200 rounded-md px-4 py-2 shadow-md hover:bg-gray-300">Back</a>
+{% endblock %}

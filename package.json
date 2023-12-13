@@ -1,0 +1,14 @@
+{
+  "name": "yff",
+  "version": "1.0.0",
+  "repository": {
+    "type": "git",
+    "url": "git@bitlab.bit-academy.nl:803ce71e-0a33-11ec-a943-4213e7ee7fac/5b605e32-0a5a-11ec-a943-4213e7ee7fac/Upgrade-Routing-018b1db4-018b1db4.git"
+  },
+  "dependencies": {
+    "tailwindcss": "^3.3.3"
+  },
+  "scripts": {
+    "watch": "tailwindcss -i ./public/tailwind.css -o ./public/css/styles.css --watch"
+  }
+}
