@@ -1,0 +1,67 @@
+{% extends 'layouts/app.twig' %}
+
+{% block title %}Feed
+{% endblock %}
+
+{% block content %}
+	<div class="max-w-screen-md mx-auto">
+		{% for post in posts %}
+
+			<div class="bg-white border border-gray-300 rounded-md mb-6">
+
+				<div class="flex items-center p-4">
+					<img src="images/{{ post.__get('user').profile_picture }}" alt="User Profile" class="w-10 h-10 rounded-full mr-3">
+					<p class="font-semibold text-gray-800">{{ post.__get('user').username }}</p>
+				</div>
+
+				<img src="{{ post.image }}" alt="Post Image" class="w-full h-64 object-cover">
+
+				<div class="p-4">
+					<div class="flex items-center space-x-4 mb-4">
+						<button>
+							<i class="fa-regular fa-heart fa-xl"></i>
+						</button>
+						<span class="text-gray-700">
+							<span class="font-bold">14</span>
+							likes
+						</span>
+					</div>
+
+					<div class="mb-2">
+						<span class="font-semibold text-gray-800">{{ post.__get('user').username }}</span>
+						<span class="text-gray-700">{{ post.caption }}</span>
+					</div>
+
+					<div class="text-gray-500">{{ timeAgo(post.created_at) }}</div>
+
+					<div class="mt-4 flex items-center border-t-4">
+						<input type="text" placeholder="Add a comment..." class="flex-grow border-none p-2 rounded-md bg-transparent focus:outline-none">
+						<a href="#" class="text-blue-500">Post</a>
+					</div>
+
+					<div class="mt-4">
+						<button onclick="toggleComments({{ post.id }})" class="font-light italic" id="commentsButton{{ post.id }}">View comments</button>
+
+						<!-- Container to display comments (initially hidden) -->
+						<div id="comments{{ post.id }}" class="hidden">
+							{% for comment in post.__get('ownCommentList') %}
+								<div class="flex items-center mb-2">
+									<div class="flex-shrink-0">
+										<img src="images/{{ comment.__get('user').profile_picture }}" alt="User Profile" class="w-6 h-6 rounded-full mr-2">
+									</div>
+									<div>
+										<span class="font-semibold">{{ comment.__get('user').username }}</span>
+										<span class="text-gray-700">{{ timeAgo(comment.posted_on) }}</span>
+										<p class="text-gray-700">{{ comment.text }}</p>
+									</div>
+								</div>
+							{% endfor %}
+						</div>
+
+					</div>
+
+				</div>
+			</div>
+		{% endfor %}
+	</div>
+{% endblock %}

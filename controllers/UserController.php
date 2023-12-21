@@ -18,7 +18,8 @@ class UserController extends BaseController
                 if (password_verify($_POST['password'], $user->password)) {
                     $_SESSION['user'] = $user->id;
                     $_SESSION['username'] = ucfirst($user->username);
-                    header('Location: ../recipe');
+                    $_SESSION['profile_picture'] = $user->profile_picture;
+                    header('Location: ../');
                 } else {
                     loadTemplate('user/login.twig', ['error' => 'Incorrect password']);
                 }

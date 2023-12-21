@@ -58,6 +58,6 @@ if (count($params) > 1) {
         error(404, 'Controller ' . $controller . ' not found');
     }
 } else {
-    $controller = new RecipeController();
+    $controller = new PostController();
     $controller->index();
 }
