@@ -13,6 +13,16 @@ class PostController extends BaseController
     public function index()
     {
         $posts = R::findAll('post');
+        $likesPerPost = R::getAll('SELECT post_id, user_id, COUNT(*) AS likes FROM `like` GROUP BY post_id');
+        foreach ($posts as $post) {
+            $post->likes = 0;
+            foreach ($likesPerPost as $like) {
+                if ($like['post_id'] == $post->id) {
+                    $post->likes = $like['likes'];
+                    break;
+                }
+            }
+        }
         loadTemplate('post/index.twig', ['posts' => $posts]);
     }
 
@@ -41,7 +51,6 @@ class PostController extends BaseController
         $post = R::dispense('post');
         $post->caption = $_POST['caption'];
         $post->created_at = date('Y-m-d H:i:s');
-        $post->level = $_POST['level'];
         $post->user = R::load('user', $_SESSION['user']);
 
         $image = $this->codeToImage($_POST['code'], $_POST['language'], $_POST['theme']);

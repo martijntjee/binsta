@@ -11,23 +11,33 @@ class UserController extends BaseController
 
     public function loginPost()
     {
-        $users = R::findAll('user');
+        try {
+            $users = R::findAll('user');
+            $loggedIn = false;
 
-        foreach ($users as $user) {
-            if ($user->username == $_POST['username']) {
-                if (password_verify($_POST['password'], $user->password)) {
-                    $_SESSION['user'] = $user->id;
-                    $_SESSION['username'] = ucfirst($user->username);
-                    $_SESSION['profile_picture'] = $user->profile_picture;
-                    header('Location: ../');
-                } else {
-                    loadTemplate('user/login.twig', ['error' => 'Incorrect password']);
+            foreach ($users as $user) {
+                if ($user->email == $_POST['email']) {
+                    if (password_verify($_POST['password'], $user->password)) {
+                        $_SESSION['user'] = $user->id;
+                        $_SESSION['email'] = ucfirst($user->email);
+                        $_SESSION['profile_picture'] = $user->profile_picture;
+                        $loggedIn = true;
+                        header('Location: ../');
+                        break;
+                    } else {
+                        throw new Exception('Incorrect password');
+                    }
                 }
-            } else {
-                loadTemplate('user/login.twig', ['error' => 'Incorrect username']);
             }
+
+            if (!$loggedIn) {
+                throw new Exception('Incorrect Email');
+            }
+        } catch (Exception $e) {
+            loadTemplate('user/login.twig', ['error' => $e->getMessage()]);
         }
     }
+
 
     public function logout()
     {
@@ -42,23 +52,51 @@ class UserController extends BaseController
 
     public function registerPost()
     {
-        if (R::findOne('user', 'username = ?', [$_POST['username']])) {
-            loadTemplate('user/register.twig', ['error' => 'Username is already taken']);
-        } else if ($_POST['password'] != $_POST['confirm_password']) {
-            loadTemplate('user/register.twig', ['error' => 'Passwords do not match']);
-        } else if (empty($_POST['username']) || empty($_POST['password']) || empty($_POST['confirm_password'])) {
-            loadTemplate('user/register.twig', ['error' => 'Please fill in all fields']);
-        } else {
-            // register user
+        try {
+            // Check if username is already taken
+            if (R::findOne('user', 'username = ?', [$_POST['username']])) {
+                throw new Exception('Username is already taken');
+            }
+
+            // Check if passwords match
+            if ($_POST['password'] != $_POST['confirm_password']) {
+                throw new Exception('Passwords do not match');
+            }
+
+            // Check if any required field is empty
+            $requiredFields = ['username', 'password', 'confirm_password', 'email', 'display_name', 'profile_picture'];
+            foreach ($requiredFields as $field) {
+                if (empty($_POST[$field])) {
+                    throw new Exception('Please fill in all fields');
+                }
+            }
+
+            // Register user
             $user = R::dispense('user');
             $user->username = $_POST['username'];
+            $user->email = $_POST['email'];
             $user->password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+            $user->display_name = $_POST['display_name'];
+            
+            // Upload profile picture
+            $directory = 'images/' . $_POST['username'] . '/';
+            if (!file_exists($directory)) {
+                mkdir($directory, 0777, true);
+            }
+            $fileName = uniqid() . '.png';
+            var_dump($_FILES['profile_picture']['tmp_name']);
+            move_uploaded_file($_FILES['profile_picture']['tmp_name'], $directory . $fileName);
+            $user->profile_picture = $directory . $fileName;
+
             R::store($user);
 
-            // login user
+            // Log in user
             $_SESSION['user'] = $user->id;
             $_SESSION['username'] = ucfirst($user->username);
-            header('Location: ../recipe');
+            $_SESSION['profile_picture'] = $user->profile_picture;
+            header('Location: ../');
+        } catch (Exception $e) {
+            loadTemplate('user/register.twig', ['error' => $e->getMessage()]);
         }
     }
 }

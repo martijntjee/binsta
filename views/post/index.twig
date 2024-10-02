@@ -14,7 +14,9 @@
 					<p class="font-semibold text-gray-800">{{ post.__get('user').username }}</p>
 				</div>
 
-				<img src="{{ post.image }}" alt="Post Image" class="w-full h-64 object-cover">
+				<div class="relative aspect-w-16 aspect-h-9">
+                    <img src="{{ post.image }}" alt="Post Image" class="object-cover w-full h-full">
+                </div>
 
 				<div class="p-4">
 					<div class="flex items-center space-x-4 mb-4">
@@ -22,7 +24,7 @@
 							<i class="fa-regular fa-heart fa-xl"></i>
 						</button>
 						<span class="text-gray-700">
-							<span class="font-bold">14</span>
+							<span class="font-bold">{{ post.likes }}</span>
 							likes
 						</span>
 					</div>
