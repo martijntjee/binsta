@@ -1,99 +1,148 @@
-# Mijn Fullstack Framework
+# Binsta - A Social Platform for Programmers
 
-## Installatie
-Voor dit project hebt je php nodig, doe dit via [XAMPP]('https://www.apachefriends.org/download.html'). Als dit klaar is hoor je in de terminal de command `php -v` uitvoeren. Daarnaast is [Composer]('https://getcomposer.org/doc/00-intro.md#installation-windows') ook nodig, is dit klaar voer dan het command `composer -v` uit om te kijken of composer succesvol is geïnstalleerd.
-Voor de tailwindcss heb je javascript nodig, mocht je dit niet hebben, kan je het [hier]('https://nodejs.org/en/download') vinden, controller of dit gelukt is met `node -v`.
+Binsta is an Instagram-like platform for programmers to share and explore code snippets. Built using a custom framework with Twig and RedBeanPHP, it offers features such as account registration, profile customization, syntax-highlighted posts, user interaction (likes, comments), and a personalized feed. Additional features include forking code snippets and multiple color schemes for enhanced visual customization.
+
+## Installation
+
+To set up Binsta, you will need the following tools installed on your system:
+
+1. **PHP** - Download and install PHP via [XAMPP](https://www.apachefriends.org/download.html). Verify installation with the command:
+   ```bash
+   php -v
+   ```
+2. **Composer** - Install Composer from [this guide](https://getcomposer.org/doc/00-intro.md#installation-windows). Verify installation with:
+   ```bash
+   composer -v
+   ```
+3. **Node.js** (for TailwindCSS) - Download Node.js from [here](https://nodejs.org/en/download). Verify installation with:
+   ```bash
+   node -v
+   ```
 
 ## Setup
-Voer de volgende commands uit in volgorde:
-- `composer i`
-- `npm i`
-- `npm run watch`
 
-## Database
-Ook is er een database server nodig, waarop je een database aanmaakt genaamd: 'binsta', zodra dit klaar is kan je bij index.php en seeder.php bij de `R::setup()` de gegevens aanpassen volgens jouw setup:
-- host: De naam van de server waarop je de database host
-- dbname: De naam van de Database, oftewel binsta
-- username: De gebruikersnaam van het account wat je wilt gebruiken om een connectie te maken met je server
-- password: Het wachtwoord die bij de gebruiker hoort
+Follow these steps to set up the project:
 
-Is dit gelukt, voer het volgende command uit om de database te vullen met data:
-- `php database/seeder.php`
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/MartijnKerpentier/binsta.git
+   ```
+2. Navigate to the project directory:
+   ```bash
+   cd binsta
+   ```
+3. Install PHP dependencies:
+   ```bash
+   composer install
+   ```
+4. Install Node.js dependencies:
+   ```bash
+   npm install
+   ```
+5. Start TailwindCSS watcher:
+   ```bash
+   npm run watch
+   ```
 
-# User Table
+## Database Configuration
 
-| Field           | Type     | Constraint | 
-| --------------- | -------- | ---------- |
-| PK: UserID      |          |            |
-| Username        |          |            |
-| Password        |          |            |
-| Email           |          |            |
-| Bio             |          |            |
-| ProfilePicture  |          |            |
+1. Set up a database server and create a database named `binsta`.
 
-# Post Table
+2. Import the `import.sql` file to set up the required tables. This can be done via a database management tool like phpMyAdmin or through the terminal:
 
-| Field           | Type     | Constraint | 
-| --------------- | -------- | ---------- |
-| PK: PostID      |          |            |
-| FK: UserID      |          |            |
-| Caption         |          |            |
-| ImageURL        |          |            |
-| CreationDate    |          |            |
+   ```bash
+   mysql -u <username> -p binsta < import.sql
+   ```
 
-# Like Table
+3. Update the database connection in `index.php` and `seeder.php`:
 
-| Field           | Type     | Constraint | 
-| --------------- | -------- | ---------- |
-| PK: LikeID      |          |            |
-| FK: UserID      |          |            |
-| FK: PostID      |          |            |
+   ```php
+   R::setup('mysql:host=<host>;dbname=binsta', '<username>', '<password>');
+   ```
 
-# Comment Table
+4. Populate the database with sample data using the seeder script:
 
-| Field           | Type     | Constraint | 
-| --------------- | -------- | ---------- |
-| PK: CommentID   |          |            |
-| FK: UserID      |          |            |
-| FK: PostID      |          |            |
-| Text            |          |            |
-| CommentDate     |          |            |
+   ```bash
+   php database/seeder.php
+   ```
 
-# CodeSnippet Table
+## Features
 
-| Field           | Type     | Constraint | 
-| --------------- | -------- | ---------- |
-| PK: SnippetID   |          |            |
-| FK: UserID      |          |            |
-| Text            |          |            |
-| Language        |          |            |
-| SyntaxHighlighting |      |            |
+- **User Accounts**: Registration, login, and profile customization (bio, display name, profile picture).
+- **Posts**: Share code snippets with captions and syntax highlighting.
+- **Feed**: View posts from followed users.
+- **Interaction**: Like and comment on posts.
+- **Forking**: Create a copy of a code snippet to customize or build upon.
+- **Color Schemes**: Choose custom colors for posts.
 
-# Fork Table
+## Database Structure
 
-| Field           | Type     | Constraint | 
-| --------------- | -------- | ---------- |
-| PK: ForkID      |          |            |
-| FK: UserID      |          |            |
-| FK: OriginalSnippetID |    |            |
-| FK: ForkedSnippetID   |    |            |
+### User Table
 
-# Feed Table
+| Field            | Type         | Constraint      |
+| ---------------- | ------------ | --------------- |
+| id (PK)          | int unsigned | AUTO\_INCREMENT |
+| username         | varchar(191) | NOT NULL        |
+| password         | varchar(191) | NOT NULL        |
+| email            | varchar(191) | NOT NULL        |
+| profile\_picture | varchar(191) | NULL            |
+| bio              | varchar(191) | NULL            |
+| display\_name    | varchar(191) | NULL            |
 
-| Field           | Type     | Constraint | 
-| --------------- | -------- | ---------- |
-| PK: FeedID      |          |            |
-| FK: UserID      |          |            |
-| FK: PostID      |          |            |
-| Timestamp       |          |            |
+### Post Table
 
-# ColorScheme Table
+| Field         | Type         | Constraint      |
+| ------------- | ------------ | --------------- |
+| id (PK)       | int unsigned | AUTO\_INCREMENT |
+| user\_id (FK) | int unsigned | NOT NULL        |
+| caption       | varchar(191) | NULL            |
+| image         | varchar(191) | NULL            |
+| created\_at   | varchar(191) | NOT NULL        |
 
-| Field           | Type     | Constraint | 
-| --------------- | -------- | ---------- |
-| PK: SchemeID    |          |            |
-| Name            |          |            |
-| BackgroundColor |          |            |
-| ForegroundColor |          |            |
-| AccentColor     |          |            |
+### Comment Table
+
+| Field         | Type         | Constraint      |
+| ------------- | ------------ | --------------- |
+| id (PK)       | int unsigned | AUTO\_INCREMENT |
+| user\_id (FK) | int unsigned | NOT NULL        |
+| post\_id (FK) | int unsigned | NOT NULL        |
+| text          | varchar(191) | NOT NULL        |
+| posted\_on    | varchar(191) | NOT NULL        |
+
+### Snippet Table
+
+| Field         | Type         | Constraint      |
+| ------------- | ------------ | --------------- |
+| id (PK)       | int unsigned | AUTO\_INCREMENT |
+| user\_id (FK) | int unsigned | NOT NULL        |
+| text          | varchar(191) | NOT NULL        |
+| language      | varchar(191) | NOT NULL        |
+
+### Fork Table
+
+| Field            | Type         | Constraint      |
+| ---------------- | ------------ | --------------- |
+| id (PK)          | int unsigned | AUTO\_INCREMENT |
+| snippet\_id (FK) | int unsigned | NOT NULL        |
+| user\_id (FK)    | int unsigned | NOT NULL        |
+
+### Follower Table
+
+| Field             | Type         | Constraint      |
+| ----------------- | ------------ | --------------- |
+| id (PK)           | int unsigned | AUTO\_INCREMENT |
+| user\_id (FK)     | int unsigned | NOT NULL        |
+| follower\_id (FK) | int unsigned | NOT NULL        |
+
+### Like Table
+
+| Field         | Type         | Constraint      |
+| ------------- | ------------ | --------------- |
+| id (PK)       | int unsigned | AUTO\_INCREMENT |
+| user\_id (FK) | int unsigned | NOT NULL        |
+| post\_id (FK) | int unsigned | NOT NULL        |
+
+## License
+
+This project is open-source and available under the [MIT License](LICENSE).
 
