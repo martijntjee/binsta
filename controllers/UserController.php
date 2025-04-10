@@ -53,17 +53,14 @@ class UserController extends BaseController
     public function registerPost()
     {
         try {
-            // Check if username is already taken
             if (R::findOne('user', 'username = ?', [$_POST['username']])) {
                 throw new Exception('Username is already taken');
             }
 
-            // Check if passwords match
             if ($_POST['password'] != $_POST['confirm_password']) {
                 throw new Exception('Passwords do not match');
             }
 
-            // Check if any required field is empty
             $requiredFields = ['username', 'password', 'confirm_password', 'email', 'display_name', 'profile_picture'];
             foreach ($requiredFields as $field) {
                 if (empty($_POST[$field])) {
@@ -71,14 +68,12 @@ class UserController extends BaseController
                 }
             }
 
-            // Register user
             $user = R::dispense('user');
             $user->username = $_POST['username'];
             $user->email = $_POST['email'];
             $user->password = password_hash($_POST['password'], PASSWORD_DEFAULT);
             $user->display_name = $_POST['display_name'];
             
-            // Upload profile picture
             $directory = 'images/' . $_POST['username'] . '/';
             if (!file_exists($directory)) {
                 mkdir($directory, 0777, true);
@@ -90,7 +85,6 @@ class UserController extends BaseController
 
             R::store($user);
 
-            // Log in user
             $_SESSION['user'] = $user->id;
             $_SESSION['username'] = ucfirst($user->username);
             $_SESSION['profile_picture'] = $user->profile_picture;

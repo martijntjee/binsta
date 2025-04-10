@@ -17,14 +17,6 @@ class BaseController
         return $bean;
     }
 
-    public function authorizeUser()
-    {
-        if (!isset($_SESSION['user'])) {
-            header('Location: /user/login');
-            exit();
-        }
-    }
-
     public function codeToImage($code, $langauge, $theme)
     {
         $url = sprintf('http://127.0.0.1:3000/api/to-image?language=%s&theme=%s', $langauge, $theme);
